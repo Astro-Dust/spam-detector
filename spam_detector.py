@@ -6,10 +6,6 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-# montagem do google drive
-# (removido para simplificar, pois o Google Colab não é usado em uma GUI local)
-# Se necessário, adapte a leitura do arquivo para um caminho local
-
 # importação do arquivo
 df = pd.read_csv('mail_data.csv')
 
@@ -41,7 +37,7 @@ model = LogisticRegression()
 # treinando o modelo de regressão logística usando o conjunto de treinamento
 model.fit(x_train_features, y_train)
 
-# Função para classificar o texto inserido
+# função para classificar o texto inserido
 def classificar_texto():
     texto = entrada_texto.get()
 
@@ -49,33 +45,33 @@ def classificar_texto():
         messagebox.showwarning("Aviso", "Por favor, insira um texto para classificação.")
         return
 
-    # Vetorizar o texto
+    # vetorizar o texto
     texto_vetorizado = feature_extraction.transform([texto])
 
-    # Prever a classe
+    # prever a classe
     resultado = model.predict(texto_vetorizado)
 
-    # Exibir resultado na GUI
+    # exibir resultado na GUI
     if resultado[0] == 0:
         resultado_label.config(text="Resultado: E-mail comum.")
     else:
         resultado_label.config(text="Resultado: SPAM!")
 
-# Criar a janela principal
+# criar a janela principal
 janela = tk.Tk()
 janela.title("Detector de Spam")
 
-# Criar widgets
+# criando as labels, input e botão
 rotulo = tk.Label(janela, text="Insira o texto abaixo:")
 entrada_texto = tk.Entry(janela, width=50)
 botao_classificar = tk.Button(janela, text="Classificar", command=classificar_texto)
 resultado_label = tk.Label(janela, text="Resultado:")
 
-# Organizar widgets na janela
+# organizando os itens na janela
 rotulo.pack(pady=10)
 entrada_texto.pack(pady=10)
 botao_classificar.pack(pady=10)
 resultado_label.pack(pady=10)
 
-# Iniciar a interface gráfica
+# mostrando a janela
 janela.mainloop()
