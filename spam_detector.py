@@ -48,26 +48,33 @@ def classificar_texto():
     # vetorizar o texto
     texto_vetorizado = feature_extraction.transform([texto])
 
-    # prever a classe
-    resultado = model.predict(texto_vetorizado)
+    # prever a probabilidade
+    probabilidade_spam = model.predict_proba(texto_vetorizado)[0, 1]
+
+    # ajustar o limiar de decisão
+    limiar = 0.5  # ajuste conforme necessário
+    resultado = 1 if probabilidade_spam > limiar else 0
 
     # exibir resultado na GUI
-    if resultado[0] == 0:
-        resultado_label.config(text="Resultado: E-mail comum.")
+    if resultado == 0:
+        resultado_label.config(text="Resultado: E-mail comum", font=("underline",))
     else:
-        resultado_label.config(text="Resultado: SPAM!")
+        resultado_label.config(text="Resultado: SPAM!", font=("underline",))
 
 # criar a janela principal
 janela = tk.Tk()
 janela.title("Detector de Spam")
+janela.configure(bg="white")  # Cor de fundo da janela
 
 # criando as labels, input e botão
-rotulo = tk.Label(janela, text="Insira o texto abaixo:")
+frame_titulo = tk.Frame(janela, bg="blue")
+rotulo = tk.Label(frame_titulo, text="Insira o texto suspeito recebido:", bg="blue", fg="white")
 entrada_texto = tk.Entry(janela, width=50)
-botao_classificar = tk.Button(janela, text="Classificar", command=classificar_texto)
+botao_classificar = tk.Button(janela, text="Classificar", command=classificar_texto, bg="#4CAF50", fg="white", padx=20, pady=10, relief=tk.GROOVE, font=("Helvetica", 12, "bold"))
 resultado_label = tk.Label(janela, text="Resultado:")
 
 # organizando os itens na janela
+frame_titulo.pack(fill="x")
 rotulo.pack(pady=10)
 entrada_texto.pack(pady=10)
 botao_classificar.pack(pady=10)
